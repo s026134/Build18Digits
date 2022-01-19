@@ -1,0 +1,103 @@
+#download opencv-python package
+import cv2
+import numpy as np
+print("Package Imported")
+
+#reading an image
+img = cv2.imread("") #insert path way
+
+#showing an image
+cv2.imshow("Output", img)
+#millisecond delay
+cv2.waitKey(1)
+
+#create video capture object
+cap = cv2.VideoCapture("") # insert pathway
+
+#displays the video
+while True:
+    success, img = cap.read()
+    cv2.imshow("video", img)
+    #delay, keyboard press quit when q is pressed
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+#using a webcam
+#need id of the camera 3 and 4 are width and height
+
+#press 0 for default camera
+#create webcam object
+webCam = cv2.VideoCapture(0)
+#width
+webCam = set(3, 640)
+#height
+webCam = set(4, 480)
+
+#look to above code to display the video
+#change brightness
+webCam = set(10, 100) #increases brightness to 100
+
+
+#basic functions for open CV
+img = cv2.imread("") #pathway
+#values can range from 0 to 255 (8 bit scale)
+kernel = np.ones((5,5),np.uint8)
+
+#convert into grayscale
+imgGray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) #converts into different color spaces
+
+#blur an image
+#kernal size (odd #, odd #)
+imgBlur = cv2.GaussianBlur(imgGray,(7,7),0)
+
+#find edges
+imgCanny = cv2.Canny(img, 100, 100)#threshold values
+#(150, 200) lower edges
+
+#increase thickness of edge
+imgDilation = cv2.dilate(imgCanny, kernel, iterations = 1)#need a matrix of all 1 value, need numpy (should already be there)
+#increasing the iterations, increases thickness
+
+#decrease thickness of edge
+imgEroded = cv2.erode(imgDilation, kernel, iterations = 1)
+
+#execution of filters
+cv2.imshow("Gray Image", imgGray)
+cv2.imshow("Blur Image", imgBlur)
+cv2.imshow("Canny Image", imgCanny)
+cv2.imshow("Dilation Image", imgDilation)
+cv2.imshow("Eroded Image", imgEroded)
+cv2.waitKey(0)
+
+
+
+#Resizing and cropping
+#think of a canvas and python graphics 112 x across, y down
+img - cv2.imread("")#pathway
+
+#find size by printing in terminal
+print(img.shape)
+
+#resize
+imgResize = cv2.resize(img, (300,200))#width, height
+
+#cropping
+imgCropped = img[0:200, 200:500]#starting and end point, height then width,
+# how much to maintain 0 to 200 height, 200 to 500 width
+
+cv2.imshow("Image", img)
+cv2.imshow("Resized Image", imgResize)
+cv2.imshow("Cropped Image", imgCropped)
+
+cv2.waitKey(0)
+
+
+#drawing shapes and text on images
+img = np.zeros((512,512,3), np.uint8) #matrix of all black squares
+print(img)
+img[:]= 255
+
+cv2.imshow("Image", img)
+
+cv2.waitKey(0)
+

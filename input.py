@@ -1,6 +1,6 @@
 from lib2to3.pytree import HUGE
 import numpy as np
-import matplotlib
+#import matplotlib
 import cv2 as cv
 import sys
 

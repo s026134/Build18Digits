@@ -72,7 +72,7 @@ if __name__ == "__main__":
 	gui.title("Simple Calculator")
 
 	# set the configuration of GUI window
-	gui.geometry("270x150")
+	gui.geometry("800x850")
 
 	# StringVar() is the variable class
 	# we create an instance of this class
@@ -85,7 +85,7 @@ if __name__ == "__main__":
 	# grid method is used for placing
 	# the widgets at respective positions
 	# in table like structure .
-	expression_field.grid(columnspan=4, ipadx=70)
+	expression_field.grid(columnspan=4, ipadx=34)
 
 	# create a Buttons and place at a particular
 	# location inside the root window .

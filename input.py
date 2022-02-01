@@ -36,20 +36,24 @@ def findColor():
         #cv.imshow('HSV', hsv)
 
         while True:
-            minHueRed = cv.getTrackbarPos("hue min", "Track Bars") # next 6 lines: change to values recorded on Monday 1/31 + get rid of trackbars.
-            minHueBlue = cv.getTrackbarPos("hue min", "Track Bars")
-            maxHue = 179 # max is always 179 for Hue
-            minSatRed = cv.getTrackbarPos("sat min", "Track Bars") # will need separate values for red and blue
-            minSatBlue = cv.getTrackbarPos("sat min", "Track Bars")
-            maxSat = 255 # maxSat is always 255 (unless we're working with yellow - that's a different story lol)
-            minValRed = cv.getTrackbarPos("val min", "Track Bars")
-            minValBlue = cv.getTrackbarPos("val min", "Track Bars")
-            maxVal = 255 # maxVal is always 255 (again, may have to play around with this for colors other than red and blue)
+            minHueRed = 81 # next 6 lines: change to values recorded on Monday 1/31 + get rid of trackbars.
+            minHueBlue = 102
+            maxHueRed = 179 
+            maxHueBlue = 142
+            minSatRed = 150 # will need separate values for red and blue
+            minSatBlue = 160
+            maxSatRed = 255 
+            maxSatBlue = 255
+            minValRed = 125
+            minValBlue = 0
+            maxValRed = 255 
+            maxValBlue = 176
             lowerRed = np.array([minHueRed, minSatRed, minValRed])
             lowerBlue = np.array([minHueBlue, minSatBlue, minValBlue])
-            upper = np.array([maxHue, maxSat, maxVal])
-            maskRed = cv.inRange(hsv, lowerRed, upper)
-            maskBlue = cv.inRange(hsv, lowerBlue, upper)
+            upperRed = np.array([maxHueRed, maxSatRed, maxValRed])
+            upperBlue = np.array([maxHueBlue, maxSatBlue, maxValBlue])
+            maskRed = cv.inRange(hsv, lowerRed, upperRed)
+            maskBlue = cv.inRange(hsv, lowerBlue, upperBlue)
             #result = cv.bitwise_and(frame, frame, mask=mask)
             cv.imshow("og", frame)
             cv.imshow("hsv", hsv)

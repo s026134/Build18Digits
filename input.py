@@ -4,7 +4,7 @@ import numpy as np
 import cv2 as cv
 import sys
 
-capture = cv.VideoCapture(0)
+capture = cv.VideoCapture(1)
 calc_input = ""
 ip = ""
 
@@ -70,11 +70,12 @@ def findColor():
 
         hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
         # cv.imshow('HSV', hsv)
+        blurred = cv.GaussianBlur(hsv, (3,3), cv.BORDER_DEFAULT)
 
         #Hue, Sat, Val
         minRedColorVals = [0,139,121]
         maxRedColorVals = [179,255,255]
-        minBlueColorVals = [53, 86, 78]
+        minBlueColorVals = [84, 154, 112]
         maxBlueColorVals = [179,255,255]
         minOrangeColorVals = [0,149,165]
         maxOrangeColorVals = [179, 255, 255]
@@ -88,9 +89,9 @@ def findColor():
         upperOrange = np.array(maxOrangeColorVals)
 
         #masks
-        maskRed = cv.inRange(hsv, lowerRed, upperRed)
-        maskBlue = cv.inRange(hsv, lowerBlue, upperBlue)
-        maskOrange = cv.inRange(hsv, lowerOrange, upperOrange)
+        maskRed = cv.inRange(blurred, lowerRed, upperRed)
+        maskBlue = cv.inRange(blurred, lowerBlue, upperBlue)
+        maskOrange = cv.inRange(blurred, lowerOrange, upperOrange)
 
         # isInput(maskRed)
         # isInput(maskBlue)
@@ -99,17 +100,32 @@ def findColor():
         imgResult2 = cv.bitwise_and(frame, frame, mask=maskBlue)
 
         # this is to make the bounding boxes
+        # blurRed = cv.GaussianBlur(maskRed, (3, 3), cv.BORDER_DEFAULT)
+        # cannyRed = cv.Canny(blurRed, 125, 175)
         contours, hierarchy = cv.findContours(maskRed, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+        
         if len(contours) != 0:
             for contour in contours:
-                if cv.contourArea(contour) > 500:
+                if cv.contourArea(contour) > 500 and cv.contourArea(contour) < 2000:
                     x, y, w, h = cv.boundingRect(contour)
                     cv.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 3)
                     cv.rectangle(imgResult, (x, y), (x + w, y + h), (0, 255, 0), 3)
 
+        # blurBlue = cv.GaussianBlur(maskBlue, (3, 3), cv.BORDER_DEFAULT)
+        # cannyBlue = cv.Canny(blurBlue, 125, 175)
+        # contours2, hierarchy2 = cv.findContours(maskBlue, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+
+        # if len(contours) != 0:
+        #     for contour in contours2:
+        #         if cv.contourArea(contour) > 500 and cv.contourArea(contour) < 2000:
+        #             x, y, w, h = cv.boundingRect(contour)
+        #             cv.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 3)
+        #             cv.rectangle(imgResult2, (x, y), (x + w, y + h), (0, 0, 255), 3)
+
 
         # imgResult = cv.bitwise_and(frame, frame, mask=maskBlue)
-        imgHor = np.hstack((frame, hsv, imgResult, imgResult2))
+        # imgHor = np.hstack((frame, hsv, imgResult, imgResult2))
+        imgHor = np.hstack((frame, imgResult, imgResult2))
         imgHor2Masks = np.hstack((maskRed, maskBlue, maskOrange))
 
         #shows an image stacked horizontally (a dual image)

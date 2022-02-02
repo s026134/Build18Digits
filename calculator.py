@@ -164,37 +164,37 @@ if __name__ == "__main__":
 	def calculatorInput(row, col):
 		if(row==1 and col==0):
 			button1.invoke()
-		if(row==1 and col==1):
+		elif(row==1 and col==1):
 			button2.invoke()
-		if(row==1 and col==2):
+		elif(row==1 and col==2):
 			button3.invoke()
-		if(row==1 and col==3):
+		elif(row==1 and col==3):
 			divide.invoke()
-		if(row==2 and col==0):
+		elif(row==2 and col==0):
 			button4.invoke()
-		if(row==2 and col==1):
+		elif(row==2 and col==1):
 			button5.invoke()
-		if(row==2 and col==2):
+		elif(row==2 and col==2):
 			button6.invoke()
-		if(row==2 and col==3):
+		elif(row==2 and col==3):
 			multiply.invoke()
-		if(row==3 and col==0):
+		elif(row==3 and col==0):
 			button7.invoke()
-		if(row==3 and col==1):
+		elif(row==3 and col==1):
 			button8.invoke()
-		if(row==3 and col==2):
+		elif(row==3 and col==2):
 			button9.invoke()
-		if(row==3 and col==3):
+		elif(row==3 and col==3):
 			minus.invoke()
-		if(row==4 and (col==0 or col==1)):
+		elif(row==4 and (col==0 or col==1)):
 			button0.invoke()
-		if(row==4 and col==2):
+		elif(row==4 and col==2):
 			Decimal.invoke()
-		if(row==4 and col==3):
+		elif(row==4 and col==3):
 			plus.invoke()
-		if(row==5 and (col==0 or col==1)):
+		elif(row==5 and (col==0 or col==1)):
 			clear.invoke()
-		if(row==5 and (col==2 or col==3)):
+		else: #(row==5 and (col==2 or col==3))
 			equal.invoke()
 	# start the GUI
 	gui.mainloop()

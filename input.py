@@ -3,8 +3,10 @@ import numpy as np
 # import matplotlib
 import cv2 as cv
 import sys
+from grid import *
+from calculator import *
 
-capture = cv.VideoCapture(1)
+capture = cv.VideoCapture(0)
 calc_input = ""
 ip = ""
 
@@ -22,12 +24,6 @@ cv.createTrackbar("val max", "Track Bars", 255, 255, empty)
 def resizeVid(w, h):
     capture.set(3, w)
     capture.set(4, h)
-
-
-def findGridPos(img):
-    # find position of finger on grid
-    return None
-
 
 def isInput(img):
     # write code to determine if frame is an input, return boolean
@@ -61,6 +57,42 @@ def findingValues():
         if cv.waitKey(30) == ord(
                 'q'):  # this never triggers which is why I fear this is an infinite loop. Play around with break conditions.
             break  # maybe if the equals symbol is pressed, this break condition is met?
+
+def getCell(frame, x1, y1, x2, y2):
+    numRows, numCols = getGridDim()
+    avgX = (x1 + x2)/2 # find middle of bounding box
+    avgY = (y1 + y2)/2
+    gridWidth = frame.width
+    gridHeight = frame.height
+    cellWidth = gridWidth // numCols
+    cellHeight = gridHeight // numRows
+    row = int(avgY / cellHeight)
+    col = int(avgX / cellWidth)
+
+    return(row, col)
+
+def collision(frame, boundingBoxes):
+    # returns coords of intersecting rectangle OR if no intersection, returns (0,0,0,0)
+    # collisions = []
+    if(boundingBoxes == None):
+        return False, (0,0,0,0)
+
+    for X1, Y1, X2, Y2 in boundingBoxes:
+        for x1, y1, x2, y2 in boundingBoxes:
+            if((X1 < x1 < X2) and (Y1 < y2 < Y2)): # or ((X1 < x2 < X2) and (Y1 < y1 < Y2))):
+                if(y1 < Y1):
+                    return True, (X1,Y1,x2,y2)
+                if(y1 > Y1):
+                    return True, (X1, y1, x2, Y2)
+            if((X1 < x2 < X2) and (Y1 < y1 < Y2)):
+                if(y1 < Y1):
+                    return True, (x1, Y1, X2, y2)
+                if(y1 > Y1):
+                    return True, (x1, y1, X2, Y2)
+    return False, (0,0,0,0)
+
+        # row, col = getCell(frame, x1, y1, x2, y2)
+        # calculatorInput(row, col)
 
 
 def findColor():
@@ -103,11 +135,13 @@ def findColor():
         # blurRed = cv.GaussianBlur(maskRed, (3, 3), cv.BORDER_DEFAULT)
         # cannyRed = cv.Canny(blurRed, 125, 175)
         contours, hierarchy = cv.findContours(maskRed, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+        boundingBoxes = []
         
         if len(contours) != 0:
             for contour in contours:
                 if cv.contourArea(contour) > 500 and cv.contourArea(contour) < 2000:
                     x, y, w, h = cv.boundingRect(contour)
+                    boundingBoxes.append((x, y, x+w, y+h))
                     cv.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 3)
                     cv.rectangle(imgResult, (x, y), (x + w, y + h), (0, 255, 0), 3)
 
@@ -122,15 +156,22 @@ def findColor():
         #             cv.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 3)
         #             cv.rectangle(imgResult2, (x, y), (x + w, y + h), (0, 0, 255), 3)
 
-
+        collide, coords = collision(frame, boundingBoxes)
+        x1, y1, x2, y2 = coords
+        if(collide):
+            row, col = getCell(frame, x1, y1, x2, y2)
+            calculatorInput(row, col)
+        else:
+            continue
         # imgResult = cv.bitwise_and(frame, frame, mask=maskBlue)
         # imgHor = np.hstack((frame, hsv, imgResult, imgResult2))
         imgHor = np.hstack((frame, imgResult, imgResult2))
+        gridLayout(frame)
         imgHor2Masks = np.hstack((maskRed, maskBlue, maskOrange))
 
         #shows an image stacked horizontally (a dual image)
-        cv.imshow("Horizontal", imgHor)
-        cv.imshow("Masked Layers", imgHor2Masks)
+        # cv.imshow("Horizontal", imgHor)
+        # cv.imshow("Masked Layers", imgHor2Masks)
 
 
         if cv.waitKey(30) == ord(
@@ -142,7 +183,7 @@ def findColor():
 # while(isInput()):
 # isInput = False
 
-# findColor()
-findingValues()
+findColor()
+# findingValues()
 capture.release()
 cv.DestroyAllWindows()

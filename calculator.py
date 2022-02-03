@@ -37,12 +37,11 @@ def equalpress():
 		# and str function convert the result
 		# into string
 		total = str(eval(expression))
-
 		equation.set(total)
 
 		# initialize the expression variable
 		# by empty string
-		#expression = ""
+		expression = ""
 
 	# if error is generate then handle
 	# by the except block

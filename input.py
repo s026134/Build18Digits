@@ -142,7 +142,7 @@ def findColor():
 # while(isInput()):
 # isInput = False
 
-findColor()
-# findingValues()
+# findColor()
+findingValues()
 capture.release()
 cv.DestroyAllWindows()

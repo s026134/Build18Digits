@@ -193,7 +193,10 @@ if __name__ == "__main__":
 			plus.invoke()
 		elif(row==5 and (col==0 or col==1)):
 			clear.invoke()
-		else: #(row==5 and (col==2 or col==3))
+		elif(row==5 and (col==2 or col==3)):
 			equal.invoke()
+		else:
+			equation.set(" error ")
+			expression = ""
 	# start the GUI
 	gui.mainloop()

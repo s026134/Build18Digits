@@ -59,19 +59,43 @@ def clear():
 	equation.set("")
 
 
+
 # Driver code
 if __name__ == "__main__":
 	# create a GUI window
 	gui = Tk()
-
-	# set the background colour of GUI window
-	gui.configure(background="black")
-
-	# set the title of GUI window
+	gui.resizable(True, True)
 	gui.title("POG Calculator uwu")
 
 	# set the configuration of GUI window
-	gui.geometry("800x850")
+	gui.geometry("800x800")
+	gui.rowconfigure(5, minsize=30)
+	gui.columnconfigure(4, minsize=30)
+
+	#make it dynamically resize
+	Grid.rowconfigure(gui, 0, weight=1)
+	Grid.columnconfigure(gui, 0, weight=1)
+	Grid.rowconfigure(gui, 1, weight=1)
+	Grid.columnconfigure(gui, 1, weight=1)
+	Grid.rowconfigure(gui, 2, weight=1)
+	Grid.columnconfigure(gui, 2, weight=1)
+	Grid.rowconfigure(gui, 3, weight=1)
+	Grid.columnconfigure(gui, 3, weight=1)
+	Grid.rowconfigure(gui, 4, weight=1)
+	Grid.columnconfigure(gui, 4, weight=1)
+	Grid.rowconfigure(gui, 5, weight=1)
+	#set background color
+	gui.configure(background = 'black')
+
+	#center window
+	def center_window(w=300, h=200):
+    # get screen width and height
+		ws = gui.winfo_screenwidth()
+		hs = gui.winfo_screenheight()
+		# calculate position x, y
+		x = (ws/2) - (w/2)    
+		y = (hs/2) - (h/2)
+		gui.geometry('%dx%d+%d+%d' % (w, h, x, y))
 
 	# StringVar() is the variable class
 	# we create an instance of this class
@@ -79,91 +103,87 @@ if __name__ == "__main__":
 
 	# create the text entry box for
 	# showing the expression .
-	expression_field = Entry(gui, textvariable=equation, font=('Arial 100'), width=13, justify='right')
+	expression_field = Entry(gui, textvariable=equation, font=('arial',60), width=17, justify='right', fg='gray', bg='black')
 
 	# grid method is used for placing
 	# the widgets at respective positions
 	# in table like structure .
-	expression_field.grid(columnspan=4, padx=30, pady=10)
-	
+	expression_field.grid(columnspan=4, padx=20, pady=10)
+
 	# create a Buttons and place at a particular
 	# location inside the root window .
 	# when user press the button, the command or
 	# function affiliated to that button is executed .
-	button1 = Button(gui, text=' 1 ', fg='gray', bg='black', font=('Arial 80'),
+	button1 = Button(gui, text=' 1 ', fg='gray', bg='black', font=('Arial 40'),
 					 command=lambda: press(1), height=1, width=1)
 	button1.grid(row=1, column=0, sticky='EW'+'NS', padx=10, pady=10)
 		
-	button2 = Button(gui, text=' 2 ', fg='gray', bg='black', font=('Arial 80'),
+	button2 = Button(gui, text=' 2 ', fg='gray', bg='black', font=('Arial 40'),
 					command=lambda: press(2), height=1, width=1)
 	button2.grid(row=1, column=1, sticky='EW'+'NS', padx=10, pady=10)
 
-	button3 = Button(gui, text=' 3 ', fg='gray', bg='black', font=('Arial 80'),
+	button3 = Button(gui, text=' 3 ', fg='gray', bg='black', font=('Arial 40'),
 					command=lambda: press(3), height=1, width=1)
 	button3.grid(row=1, column=2, sticky='EW'+'NS', padx=10, pady=10)
 
-	button4 = Button(gui, text=' 4 ', fg='gray', bg='black', font=('Arial 80'),
+	button4 = Button(gui, text=' 4 ', fg='gray', bg='black', font=('Arial 40'),
 					command=lambda: press(4), height=1, width=1)
 	button4.grid(row=2, column=0, sticky='EW'+'NS', padx=10, pady=10)
 
-	button5 = Button(gui, text=' 5 ', fg='gray', bg='black', font=('Arial 80'),
+	button5 = Button(gui, text=' 5 ', fg='gray', bg='black', font=('Arial 40'),
 					command=lambda: press(5), height=1, width=1)
 	button5.grid(row=2, column=1, sticky='EW'+'NS', padx=10, pady=10)
 
-	button6 = Button(gui, text=' 6 ', fg='gray', bg='black', font=('Arial 80'),
+	button6 = Button(gui, text=' 6 ', fg='gray', bg='black', font=('Arial 40'),
 					command=lambda: press(6), height=1, width=1)
 	button6.grid(row=2, column=2, sticky='EW'+'NS', padx=10, pady=10)
 
-	button7 = Button(gui, text=' 7 ', fg='gray', bg='black', font=('Arial 80'),
+	button7 = Button(gui, text=' 7 ', fg='gray', bg='black', font=('Arial 40'),
 					command=lambda: press(7), height=1, width=1)
 	button7.grid(row=3, column=0, sticky='EW'+'NS', padx=10, pady=10)
 
-	button8 = Button(gui, text=' 8 ', fg='gray', bg='black', font=('Arial 80'),
+	button8 = Button(gui, text=' 8 ', fg='gray', bg='black', font=('Arial 40'),
 					command=lambda: press(8), height=1, width=1)
 	button8.grid(row=3, column=1, sticky='EW'+'NS', padx=10, pady=10)
 
-	button9 = Button(gui, text=' 9 ', fg='gray', bg='black', font=('Arial 80'),
+	button9 = Button(gui, text=' 9 ', fg='gray', bg='black', font=('Arial 40'),
 					command=lambda: press(9), height=1, width=1)
 	button9.grid(row=3, column=2, sticky='EW'+'NS', padx=10, pady=10)
 
-	button0 = Button(gui, text=' 0 ', fg='gray', bg='black', font=('Arial 80'),
+	button0 = Button(gui, text=' 0 ', fg='gray', bg='black', font=('Arial 40'),
 					command=lambda: press(0), height=1, width=1)
 	button0.grid(row=4, column=0, sticky='EW'+'NS', padx=10, pady=10, columnspan=2)
 
-	plus = Button(gui, text=' + ', fg='gray', bg='black', font=('Arial 80'),
+	plus = Button(gui, text=' + ', fg='gray', bg='black', font=('Arial 40'),
 				command=lambda: press("+"), height=1, width=1)
 	plus.grid(row=4, column=3, sticky='EW'+'NS', padx=10, pady=10)
 
-	minus = Button(gui, text=' - ', fg='gray', bg='black', font=('Arial 80'),
+	minus = Button(gui, text=' - ', fg='gray', bg='black', font=('Arial 40'),
 				command=lambda: press("-"), height=1, width=1)
 	minus.grid(row=3, column=3, sticky='EW'+'NS', padx=10, pady=10)
 
-	multiply = Button(gui, text=' * ', fg='gray', bg='black', font=('Arial 80'),
+	multiply = Button(gui, text=' * ', fg='gray', bg='black', font=('Arial 40'),
 					command=lambda: press("*"), height=1, width=1)
 	multiply.grid(row=2, column=3, sticky='EW'+'NS', padx=10, pady=10)
 
-	divide = Button(gui, text=' / ', fg='gray', bg='black', font=('Arial 80'),
+	divide = Button(gui, text=' / ', fg='gray', bg='black', font=('Arial 40'),
 					command=lambda: press("/"), height=1, width=1)
 	divide.grid(row=1, column=3, sticky='EW'+'NS', padx=10, pady=10)
 
-	equal = Button(gui, text=' = ', fg='gray', bg='black', font=('Arial 80'),
+	equal = Button(gui, text=' = ', fg='gray', bg='black', font=('Arial 40'),
 				command=equalpress, height=1, width=1)
 	equal.grid(row=5, column=2, sticky='EW'+'NS', padx=10, pady=10, columnspan=2)
 	
 
-	clear = Button(gui, text='Clear', fg='gray', bg='black', font=('Arial 80'),
+	clear = Button(gui, text='Clear', fg='gray', bg='black', font=('Arial 40'),
 				command=clear, height=1, width=1)
 	clear.grid(row=5, column=0, sticky='EW'+'NS', padx=10, pady=10, columnspan=2)
 
-	Decimal= Button(gui, text='.', fg='gray', bg='black', font=('Arial 80'),
+	Decimal= Button(gui, text='.', fg='gray', bg='black', font=('Arial 40'),
 					command=lambda: press('.'), height=1, width=1)
 	Decimal.grid(row=4, column=2, sticky='EW'+'NS', padx=10, pady=10)
 
-	#finding middle of cell
-	def findMiddle(x1, y1, x2, y2):
-		avgX = (x1 + x2)/2
-		avgY = (y1 + y2)/2
-		return (avgX, avgY)
+	
 		
 	#connecting to inputs
 	def calculatorInput(row, col):
@@ -205,4 +225,5 @@ if __name__ == "__main__":
 			equation.set(" error ")
 			expression = ""
 	# start the GUI
+	center_window(800,850)
 	gui.mainloop()

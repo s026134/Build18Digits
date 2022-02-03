@@ -159,6 +159,12 @@ if __name__ == "__main__":
 					command=lambda: press('.'), height=1, width=1)
 	Decimal.grid(row=4, column=2, sticky='EW'+'NS', padx=10, pady=10)
 
+	#finding middle of cell
+	def findMiddle(x1, y1, x2, y2):
+		avgX = (x1 + x2)/2
+		avgY = (y1 + y2)/2
+		return (avgX, avgY)
+		
 	#connecting to inputs
 	def calculatorInput(row, col):
 		if(row==1 and col==0):

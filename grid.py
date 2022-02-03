@@ -5,13 +5,16 @@ import sys
 
 capture = cv.VideoCapture(0) # 1 for external webcam
 
-def changeRes(w, h):
-    #only works for live video; same thing as a resize function(see imagePrac)
-    capture.set(3, w)
-    capture.set(4, h)
+# def changeRes(w, h):
+#     #only works for live video; same thing as a resize function(see imagePrac)
+#     capture.set(3, w)
+#     capture.set(4, h)
 
-while True:
-    isTrue, frame = capture.read()
+def getGridDim():
+    return (6, 4)
+    
+def gridLayout(frame):
+    # isTrue, frame = capture.read()
     # cv.line(frame,(10,10),(10, frame.shape[0] - 10),(255,0,0),2)
     # cv.line(frame,(10,frame.shape[0] - 10),(frame.shape[1] - 10, frame.shape[0] - 10),(255,0,0),4)
     # cv.line(frame,(frame.shape[1] - 10, frame.shape[0] - 10),(frame.shape[1] - 10, 10),(255,0,0),4)
@@ -26,7 +29,7 @@ while True:
     for j in range(0, y):
         cv.line(frame, (j*sqw, 0), (j*sqw, frame.shape[0]), (255, 0, 0), 4)
     cv.imshow('Video', frame) #display each frame
-    if cv.waitKey(20) & 0xFF == ord('d'): #if d is pressed, break out of loop and stop playing video
-        break
-capture.release()
-cv.destroyAllWindows()
+    # if cv.waitKey(20) & 0xFF == ord('q'): #if d is pressed, break out of loop and stop playing video
+    #     break
+#capture.release()
+#cv.destroyAllWindows()

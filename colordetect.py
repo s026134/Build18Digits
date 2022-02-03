@@ -8,6 +8,7 @@ def empty(a):
 
 capture = cv.VideoCapture(1)
 cv.namedWindow("Track Bars") # use following lines for testing color
+cv.resizeWindow("Track Bars", 250, 250)
 cv.createTrackbar("hue min", "Track Bars", 0, 179, empty)
 cv.createTrackbar("hue max", "Track Bars", 179, 179, empty)
 cv.createTrackbar("sat min", "Track Bars", 0, 255, empty)

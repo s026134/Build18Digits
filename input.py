@@ -6,7 +6,7 @@ import sys
 from grid import *
 from calculator import *
 
-capture = cv.VideoCapture(0)
+capture = cv.VideoCapture(1)
 calc_input = ""
 ip = ""
 
@@ -62,14 +62,16 @@ def getCell(frame, x1, y1, x2, y2):
     numRows, numCols = getGridDim()
     avgX = (x1 + x2)/2 # find middle of bounding box
     avgY = (y1 + y2)/2
-    gridWidth = frame.width
-    gridHeight = frame.height
+    gridWidth = frame.shape[1]
+    gridHeight = frame.shape[0]
     cellWidth = gridWidth // numCols
     cellHeight = gridHeight // numRows
     row = int(avgY / cellHeight)
     col = int(avgX / cellWidth)
-
-    return(row, col)
+    cv.rectangle(frame, (cellWidth*(col - 1), cellHeight*(row - 1)), (cellWidth*col, cellHeight*row),(0, 0, 255), 4)
+    cv.imshow("getCell", frame)
+    print(row, col)
+    return row, col
 
 def collision(frame, boundingBoxes):
     # returns coords of intersecting rectangle OR if no intersection, returns (0,0,0,0)
@@ -79,15 +81,15 @@ def collision(frame, boundingBoxes):
 
     for X1, Y1, X2, Y2 in boundingBoxes:
         for x1, y1, x2, y2 in boundingBoxes:
-            if((X1 < x1 < X2) and (Y1 < y2 < Y2)): # or ((X1 < x2 < X2) and (Y1 < y1 < Y2))):
-                if(y1 < Y1):
+            if((X1 <= x1 <= X2) and (Y1 <= y2 <= Y2) and (x1!=X1 or x2!=X2 or y1!=Y1 or y2!=Y2)): # or ((X1 < x2 < X2) and (Y1 < y1 < Y2))):
+                if(y1 <= Y1):
                     return True, (X1,Y1,x2,y2)
-                if(y1 > Y1):
+                if(y1 >= Y1):
                     return True, (X1, y1, x2, Y2)
-            if((X1 < x2 < X2) and (Y1 < y1 < Y2)):
-                if(y1 < Y1):
+            if((X1 <= x2 <= X2) and (Y1 <= y1 <= Y2) and (x1!=X1 or x2!=X2 or y1!=Y1 or y2!=Y2)):
+                if(y1 <= Y1):
                     return True, (x1, Y1, X2, y2)
-                if(y1 > Y1):
+                if(y1 >= Y1):
                     return True, (x1, y1, X2, Y2)
     return False, (0,0,0,0)
 
@@ -107,7 +109,7 @@ def findColor():
         #Hue, Sat, Val
         minRedColorVals = [0,139,121]
         maxRedColorVals = [179,255,255]
-        minBlueColorVals = [84, 154, 112]
+        minBlueColorVals = [77, 140, 101]
         maxBlueColorVals = [179,255,255]
         minOrangeColorVals = [0,149,165]
         maxOrangeColorVals = [179, 255, 255]
@@ -134,17 +136,18 @@ def findColor():
         # this is to make the bounding boxes
         # blurRed = cv.GaussianBlur(maskRed, (3, 3), cv.BORDER_DEFAULT)
         # cannyRed = cv.Canny(blurRed, 125, 175)
-        contours, hierarchy = cv.findContours(maskRed, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+        contours, hierarchy = cv.findContours(maskBlue, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
         boundingBoxes = []
         
         if len(contours) != 0:
             for contour in contours:
                 if cv.contourArea(contour) > 500 and cv.contourArea(contour) < 2000:
                     x, y, w, h = cv.boundingRect(contour)
+                    getCell(frame, x, y, x+w, y+h)
                     boundingBoxes.append((x, y, x+w, y+h))
                     cv.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 3)
                     cv.rectangle(imgResult, (x, y), (x + w, y + h), (0, 255, 0), 3)
-
+        cv.imshow('Frame', frame)
         # blurBlue = cv.GaussianBlur(maskBlue, (3, 3), cv.BORDER_DEFAULT)
         # cannyBlue = cv.Canny(blurBlue, 125, 175)
         # contours2, hierarchy2 = cv.findContours(maskBlue, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
@@ -156,17 +159,15 @@ def findColor():
         #             cv.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 3)
         #             cv.rectangle(imgResult2, (x, y), (x + w, y + h), (0, 0, 255), 3)
 
-        collide, coords = collision(frame, boundingBoxes)
-        x1, y1, x2, y2 = coords
-        if(collide):
-            row, col = getCell(frame, x1, y1, x2, y2)
-            calculatorInput(row, col)
-        else:
-            continue
+        # collide, coords = collision(frame, boundingBoxes)
+        # x1, y1, x2, y2 = coords
+        # if(collide):
+        #     row, col = getCell(frame, x1, y1, x2, y2)
+        #     #calculatorInput(row, col)
         # imgResult = cv.bitwise_and(frame, frame, mask=maskBlue)
         # imgHor = np.hstack((frame, hsv, imgResult, imgResult2))
         imgHor = np.hstack((frame, imgResult, imgResult2))
-        gridLayout(frame)
+        # gridLayout(frame)
         imgHor2Masks = np.hstack((maskRed, maskBlue, maskOrange))
 
         #shows an image stacked horizontally (a dual image)

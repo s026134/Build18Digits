@@ -68,34 +68,22 @@ if __name__ == "__main__":
 	gui.title("POG Calculator uwu")
 
 	# set the configuration of GUI window
-	gui.geometry("800x800")
-	gui.rowconfigure(5, minsize=30)
-	gui.columnconfigure(4, minsize=30)
+	gui.geometry("800x850")
 
 	#make it dynamically resize
 	Grid.rowconfigure(gui, 0, weight=1)
-	Grid.columnconfigure(gui, 0, weight=1)
 	Grid.rowconfigure(gui, 1, weight=1)
-	Grid.columnconfigure(gui, 1, weight=1)
 	Grid.rowconfigure(gui, 2, weight=1)
-	Grid.columnconfigure(gui, 2, weight=1)
 	Grid.rowconfigure(gui, 3, weight=1)
-	Grid.columnconfigure(gui, 3, weight=1)
 	Grid.rowconfigure(gui, 4, weight=1)
-	Grid.columnconfigure(gui, 4, weight=1)
 	Grid.rowconfigure(gui, 5, weight=1)
+	Grid.columnconfigure(gui, 0, weight=1)
+	Grid.columnconfigure(gui, 1, weight=1)
+	Grid.columnconfigure(gui, 2, weight=1)
+	Grid.columnconfigure(gui, 3, weight=1)
+
 	#set background color
 	gui.configure(background = 'black')
-
-	#center window
-	def center_window(w=300, h=200):
-    # get screen width and height
-		ws = gui.winfo_screenwidth()
-		hs = gui.winfo_screenheight()
-		# calculate position x, y
-		x = (ws/2) - (w/2)    
-		y = (hs/2) - (h/2)
-		gui.geometry('%dx%d+%d+%d' % (w, h, x, y))
 
 	# StringVar() is the variable class
 	# we create an instance of this class
@@ -103,12 +91,12 @@ if __name__ == "__main__":
 
 	# create the text entry box for
 	# showing the expression .
-	expression_field = Entry(gui, textvariable=equation, font=('arial',60), width=17, justify='right', fg='gray', bg='black')
+	expression_field = Entry(gui, textvariable=equation, font=('arial',60), justify='right', fg='gray', bg='black')
 
 	# grid method is used for placing
 	# the widgets at respective positions
 	# in table like structure .
-	expression_field.grid(columnspan=4, padx=20, pady=10)
+	expression_field.grid(columnspan=4)
 
 	# create a Buttons and place at a particular
 	# location inside the root window .
@@ -173,7 +161,6 @@ if __name__ == "__main__":
 	equal = Button(gui, text=' = ', fg='gray', bg='black', font=('Arial 40'),
 				command=equalpress, height=1, width=1)
 	equal.grid(row=5, column=2, sticky='EW'+'NS', padx=10, pady=10, columnspan=2)
-	
 
 	clear = Button(gui, text='Clear', fg='gray', bg='black', font=('Arial 40'),
 				command=clear, height=1, width=1)
@@ -224,6 +211,6 @@ if __name__ == "__main__":
 		else:
 			equation.set(" error ")
 			expression = ""
+	
 	# start the GUI
-	center_window(800,850)
 	gui.mainloop()

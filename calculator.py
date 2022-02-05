@@ -168,6 +168,7 @@ Decimal.grid(row=4, column=2, sticky='EW'+'NS', padx=10, pady=10)
 
 #connecting to inputs
 def calculatorInput(row, col):
+	gui.mainloop()
 	if(row==1 and col==0):
 		button1.invoke()
 	elif(row==1 and col==1):
@@ -205,6 +206,3 @@ def calculatorInput(row, col):
 	else:
 		equation.set(" error ")
 		expression = ""
-
-# start the GUI
-gui.mainloop()

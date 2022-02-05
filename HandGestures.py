@@ -1,14 +1,26 @@
 import cv2
+import time
+import os
 from cvzone.HandTrackingModule import HandDetector
- 
+
 cap = cv2.VideoCapture(0)
-detector = HandDetector(detectionCon=0.8, maxHands=2)
- 
+detector = HandDetector(detectionCon=0.8, maxHands=4)
+#previousTime
+pTime = 0
+
 while True:
     success, img = cap.read()
     hands, img = detector.findHands(img)  # With Draw
     # hands = detector.findHands(img, draw=False)  # No Draw
- 
+    
+    cTime = time.time()
+    fps = 1/(cTime - pTime)
+    pTime = cTime
+
+    cv2.putText(img, f'FPS: {int(fps)}', (500, 70), cv2.FONT_HERSHEY_PLAIN, 
+    3,(255,0,0), 3)
+
+
     if hands:
         # Hand 1
         hand1 = hands[0]
@@ -36,8 +48,13 @@ while True:
             # print(fingers1, fingers2)
             #length, info, img = detector.findDistance(lmList1[8], lmList2[8], img) # with draw
             length, info, img = detector.findDistance(centerPoint1, centerPoint2, img)  # with draw
- 
-    cv2.imshow("Image", img)
+
+            #centerpoint 1 and centerpoint 2 contain the (x,y) coordinates for each center
+            x1,y1 = centerPoint1
+            x2,y2 = centerPoint2
+
+
+    cv2.imshow("Image", cv2.rotate(img,cv2.ROTATE_90_CLOCKWISE))
     cv2.waitKey(1)
 
     if cv2.waitKey(30) == ord('q'):

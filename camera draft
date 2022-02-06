@@ -1,0 +1,11 @@
+import cv2
+
+#get position of finger coordinates upon movement
+#once it makes the shape to hold it
+
+
+#taking in from bounding boxes
+boundingBoxes = [x, y, x+w, y+h] for each contour
+
+
+

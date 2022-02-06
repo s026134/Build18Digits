@@ -27,10 +27,10 @@ def draw():
         
         #frame_number += 1
         success, frame = cap.read()
-        img = cv2.imread(frame)
+        # img = cv2.imread(frame)
         #if frame_number == 3:  # if frame is the third frame than replace it with blank drame
         #while (x1, y1 == x2, y2):
-        image = cv2.cvtColor(img, cv2.COLOR_BGR2RGB) #img might be frame
+        image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB) #img might be frame
             
             #change_frame_with = np.zeros_like(frame)
             #frame = change_frame_with
@@ -42,11 +42,15 @@ def draw():
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-    #cap.release()
-    #out.release()
-    #cv2.destroyAllWindows()
 
     cv2.imshow("Image", img)
     cv2.waitKey(1)
+    
+    cap.release()
+    out.release()
+    cv2.destroyAllWindows()
+
+    # cv2.imshow("Image", img)
+    # cv2.waitKey(1)
     
 draw()

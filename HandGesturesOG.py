@@ -1,15 +1,91 @@
 import cv2
 from cvzone.HandTrackingModule import HandDetector
- 
+# import everything from tkinter module
+from tkinter import *
+
 cap = cv2.VideoCapture(0)
-detector = HandDetector(detectionCon=0.8, maxHands=2)
+detector = HandDetector(detectionCon=0.8, maxHands=1)
+myEquation = ''
+
+# class Calculator:
+#     def __init__(self, width, height, buttonList):
+#         self.height = height
+#         self.width = width
+    
+#     def display():
+
+class Button:
+    def __init__(self, pos, width, height, value):
+        self.pos = pos
+        self.w = width
+        self.h = height
+        self.v = value
  
+    def draw(self, img):
+        cv2.rectangle(img, self.pos, (self.pos[0] + self.w, self.pos[1] + self.h),
+                      (225, 225, 225), cv2.FILLED)
+        cv2.rectangle(img, self.pos, (self.pos[0] + self.w, self.pos[1] + self.h),
+                      (50, 50, 50), 3)
+        cv2.putText(img, self.v, (self.pos[0] + 30, self.pos[1] + 70), cv2.FONT_HERSHEY_PLAIN,
+                    2, (50, 50, 50), 2)
+ 
+    def checkClick(self, x, y):
+        if self.pos[0] < x < self.pos[0] + self.w and \
+                self.pos[1] < y < self.pos[1] + self.h:
+            cv2.rectangle(img, (self.pos[0] + 3, self.pos[1] + 3),
+                          (self.pos[0] + self.w - 3, self.pos[1] + self.h - 3),
+                          (255, 255, 255), cv2.FILLED)
+            cv2.putText(img, self.v, (self.pos[0] + 25, self.pos[1] + 80), cv2.FONT_HERSHEY_PLAIN,
+                        5, (0, 0, 0), 5)
+            return True
+        else:
+            return False
+
+buttonListValues = [['7', '8', '9', '*'],
+                    ['4', '5', '6', '-'],
+                    ['1', '2', '3', '+'],
+                    ['0', '/', '.', '=']]
+buttonList = []
+for x in range(4):
+    for y in range(4):
+        dx = x * 100 + 800
+        dy = y * 100 + 150
+        # cv2.rectangle(img, (x, dx), (y, dy))
+        buttonList.append(Button((dx, dy), 100, 100, buttonListValues[y][x]))
+
 while True:
     success, img = cap.read()
+    img = cv2.flip(img, 1)
     hands, img = detector.findHands(img)  # With Draw
+    for i in buttonList:
+        i.draw(img)
     # hands = detector.findHands(img, draw=False)  # No Draw
- 
+    # for x in range(4):
+    #     for y in range(4):
+    #         dx = x * 100 + 800
+    #         dy = y * 100 + 150
+    #         cv2.rectangle(img, (x, dx), (y, dy), (0, 255, 255), 4)
+    #         buttonList.append(Button((dx, dy), 100, 100, buttonListValues[y][x]))
     if hands:
+        lmList = hands[0]['lmList']
+        length,_, img = detector.findDistance(lmList[8], lmList[12], img)
+        # print (length)
+        x, y = lmList[8]
+
+        if length < 50:
+            for index, button in enumerate(buttonList):
+                if button.checkClick(x, y):
+                    myValue = buttonListValues[int(index % 4)][int(index / 4)]  # get correct number
+                    if myValue == '=':
+                        try:
+                            myEquation = str(eval(myEquation))
+                        except:
+                            print("error")
+                    else:
+                        myEquation += myValue
+                    delayCounter = 1
+# Show calculator 
+
         # Hand 1
         hand1 = hands[0]
         lmList1 = hand1["lmList"]  # List of 21 Landmarks points
@@ -17,6 +93,7 @@ while True:
         centerPoint1 = hand1["center"]  # center of the hand cx,cy
         handType1 = hand1["type"]  # Hand Type Left or Right
  
+
         # print(len(lmList1),lmList1)
         # print (lmList1)
         # print(bbox1)
@@ -37,6 +114,6 @@ while True:
             # print(fingers1, fingers2)
             #length, info, img = detector.findDistance(lmList1[8], lmList2[8], img) # with draw
             length, info, img = detector.findDistance(centerPoint1, centerPoint2, img)  # with draw
- 
+    #Button.draw(img)
     cv2.imshow("Image", img)
     cv2.waitKey(1)

@@ -6,6 +6,10 @@ from tkinter import *
 cap = cv2.VideoCapture(0)
 detector = HandDetector(detectionCon=0.8, maxHands=1)
 myEquation = ''
+timePassed = 0
+timerDelay = 100
+timeClicked = 0
+validTime = 100
 
 # class Calculator:
 #     def __init__(self, width, height, buttonList):
@@ -32,20 +36,43 @@ class Button:
     def checkClick(self, x, y):
         if self.pos[0] < x < self.pos[0] + self.w and \
                 self.pos[1] < y < self.pos[1] + self.h:
-            cv2.rectangle(img, (self.pos[0] + 3, self.pos[1] + 3),
-                          (self.pos[0] + self.w - 3, self.pos[1] + self.h - 3),
-                          (255, 255, 255), cv2.FILLED)
-            cv2.putText(img, self.v, (self.pos[0] + 25, self.pos[1] + 80), cv2.FONT_HERSHEY_PLAIN,
-                        5, (0, 0, 0), 5)
-            return True
+                if timePassed > validTime:
+                    cv2.rectangle(img, (self.pos[0] + 3, self.pos[1] + 3),
+                                (self.pos[0] + self.w - 3, self.pos[1] + self.h - 3),
+                                (255, 255, 255), cv2.FILLED)
+                    cv2.putText(img, self.v, (self.pos[0] + 25, self.pos[1] + 80), cv2.FONT_HERSHEY_PLAIN,
+                                5, (0, 0, 0), 5)
+                return True
         else:
             return False
+
+class outputBox:
+    def __init__(self):
+        self.expression = ""
+        self.dimensions = (800, 50, 1200, 150)
+    
+    def draw(self,img):
+        x1, y1, x2, y2 = self.dimensions
+        cv2.rectangle(img, (x1, y1), (x2,y2),(255, 255, 255), cv2.FILLED)
+        cv2.rectangle(img, (x1, y1), (x2,y2), (50, 50, 50), 3)
+        if len(self.expression) > 20:
+            cv2.putText(img, self.expression[len(self.expression)-21:len(self.expression)-1], (850, 100), cv2.FONT_HERSHEY_PLAIN,
+                        2, (50, 50, 50), 2)
+        else:
+            cv2.putText(img, self.expression, (850, 120), cv2.FONT_HERSHEY_PLAIN,
+                        2, (50, 50, 50), 2)
+
+    def changeExpression(self, expression):
+        self.expression = expression
 
 buttonListValues = [['7', '8', '9', '*'],
                     ['4', '5', '6', '-'],
                     ['1', '2', '3', '+'],
-                    ['0', '/', '.', '=']]
+                    ['0', '/', 'C', '=']]
 buttonList = []
+
+outPutBox = outputBox()
+
 for x in range(4):
     for y in range(4):
         dx = x * 100 + 800
@@ -56,9 +83,13 @@ for x in range(4):
 while True:
     success, img = cap.read()
     img = cv2.flip(img, 1)
+
     hands, img = detector.findHands(img)  # With Draw
     for i in buttonList:
         i.draw(img)
+    
+    outPutBox.draw(img)
+    
     # hands = detector.findHands(img, draw=False)  # No Draw
     # for x in range(4):
     #     for y in range(4):
@@ -80,10 +111,22 @@ while True:
                         try:
                             myEquation = str(eval(myEquation))
                         except:
+                            myEquation = "Error"
+                            outPutBox.changeExpression("Error")
                             print("error")
+                    elif myValue == "C":
+                        myEquation = myEquation[:len(myEquation)-2]
                     else:
-                        myEquation += myValue
+                        if myEquation == "Error":
+                            myEquation = ""
+                        if timePassed >= validTime:
+                            timeClicked = timePassed
+                            validTime = timeClicked + 800
+                            myEquation += myValue
+                    outPutBox.changeExpression(myEquation)
                     delayCounter = 1
+        
+
 # Show calculator 
 
         # Hand 1
@@ -114,6 +157,15 @@ while True:
             # print(fingers1, fingers2)
             #length, info, img = detector.findDistance(lmList1[8], lmList2[8], img) # with draw
             length, info, img = detector.findDistance(centerPoint1, centerPoint2, img)  # with draw
-    #Button.draw(img)
+
+    if cv2.waitKey(30) == ord(
+                'q'):  # this never triggers which is why I fear this is an infinite loop. Play around with break conditions.
+            break  # maybe if the equals symbol is pressed, this break condition is met?
+
     cv2.imshow("Image", img)
     cv2.waitKey(1)
+    timePassed += timerDelay
+    print(timePassed, validTime)
+
+cap.release()
+cv2.DestroyAllWindows()

@@ -1,5 +1,4 @@
 import cv2 as cv
-import time
 import os
 from cvzone.HandTrackingModule import HandDetector
 from matplotlib.pyplot import draw
@@ -37,13 +36,6 @@ while True:
     success, img = cap.read()
     hands, img = detector.findHands(img)  # With Draw
     # hands = detector.findHands(img, draw=False)  # No Draw
-    
-    cTime = time.time()
-    fps = 1/(cTime - pTime)
-    pTime = cTime
-
-    cv2.putText(img, f'FPS: {int(fps)}', (500, 70), cv2.FONT_HERSHEY_PLAIN, 
-    3,(255,0,0), 3)
 
     tipIds = [4, 8, 12, 16, 20]
 
@@ -120,10 +112,7 @@ while True:
                         if timePassed >= validTime:
                             timeClicked = timePassed
                             validTime = timeClicked + 1500
-                            print ("yes")
-                # print(f'One Hand: {fingers}')
     if timePassed == validTime:
-        print("yes")
         cv.imwrite("cameraCapture.jpg",img)
         break
     timePassed += timerDelay

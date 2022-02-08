@@ -127,8 +127,6 @@ while True:
         cv.imwrite("cameraCapture.jpg",img)
         break
     timePassed += timerDelay
-    print(validTime)
-    print(f"Hello: {timePassed}")
     cv2.imshow("Image", img)
     cv2.waitKey(1)
 

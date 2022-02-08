@@ -27,8 +27,10 @@ pTime = 0
 #     return row, col
 
 b = False
-time_passed = 0
+timePassed = 0
 timerDelay = 100
+timeClicked = 0
+validTime = -100
 image_path = r"C:/Users/achst/This PC/Desktop/DigitsPictures"
 while True:
 
@@ -114,14 +116,24 @@ while True:
                         y1 = lmList_hand1[tipIds[1]][2]
                         # row, col = getCell(img, x1, y1, x1, y1)
                         # calculatorInput(row,col)
-                        time_passed += timerDelay
-                        if time_passed >= 3000:
-                            # cv.imshow("Pic", img)
-                            cv.imwrite("cameraCapture.jpg",img)
-                            break
-                print(f'One Hand: {fingers}')
+                        # print ("yes")
+                        if timePassed >= validTime:
+                            timeClicked = timePassed
+                            validTime = timeClicked + 1500
+                            print ("yes")
+                # print(f'One Hand: {fingers}')
+    if timePassed == validTime:
+        print("yes")
+        cv.imwrite("cameraCapture.jpg",img)
+        break
+    timePassed += timerDelay
+    print(validTime)
+    print(f"Hello: {timePassed}")
     cv2.imshow("Image", img)
     cv2.waitKey(1)
+
+    if cv2.waitKey(1) == ord('q'):
+        cv2.destroyAllWindows()
 
 
 cap.release()
@@ -129,7 +141,5 @@ path = r"cameraCapture.jpg"
 pic = cv.imread(path)
 cv.imshow("Picture", pic)
 cv2.waitKey(0)
-if cv2.waitKey(1) == ord('q'):
-    cv2.destroyAllWindows()
 
 # cv2.destroyAllWindows()

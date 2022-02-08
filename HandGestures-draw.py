@@ -64,14 +64,22 @@ while True:
                 if count > 1:
                     #print('count', count)
                     #print('enters count > 1')
-                    if fingerNumCount == 4:
-                        #print(fingerNumCount)
-                        print('enters the fingerNumCount == 5')
+                    # if fingerNumCount == 3:
+                    #     #print(fingerNumCount)
+                    #     print('enters the fingerNumCount == 5')
+                    #     blank = numpy.zeros(shape=[512, 512, 3], dtype = "uint8")
+                    #     blank = cv2.bitwise_not(blank)
+                    #     blank = cv2.resize(blank, dsize =(w, h), interpolation = cv2.INTER_AREA)
+                    #     #newImage = numpy.zeros(shape=[512, 512, 3], dtype = "uint8")
+                    #     #newImage = cv2.flip(newImage, 1)
+                    print(x2, y2)
+                    if 30 <= x2 <= 100 and 30 <= y2 <= 100:
+                        print("hello")
                         blank = numpy.zeros(shape=[512, 512, 3], dtype = "uint8")
                         blank = cv2.bitwise_not(blank)
                         blank = cv2.resize(blank, dsize =(w, h), interpolation = cv2.INTER_AREA)
-                        #newImage = numpy.zeros(shape=[512, 512, 3], dtype = "uint8")
-                        #newImage = cv2.flip(newImage, 1)
+
+
                     cv2.line(blank, (x1,y1), (x2,y2), (255, 0, 255), thickness = 4)
                     # cv2.line(blank, (x1, y1), (x2, y2), (255, 0, 255), thickness = 4)
                     # cv2.imwrite("draw.jpg",img)
@@ -93,6 +101,7 @@ while True:
         #     length, info, img = detector.findDistance(centerPoint1, centerPoint2, img)  # with draw
     newImage = cv2.bitwise_and(img, blank)
     newImage = cv2.flip(newImage, 1)
+    cv2.circle(newImage, (1200,50), 30, (255,0,0), cv2.FILLED)
     cv2.imshow("Image", newImage)
     cv2.waitKey(1)
 

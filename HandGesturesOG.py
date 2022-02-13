@@ -24,15 +24,15 @@ class Button:
         self.w = width
         self.h = height
         self.v = value
- 
+
     def draw(self, img):
         cv2.rectangle(img, self.pos, (self.pos[0] + self.w, self.pos[1] + self.h),
-                      (225, 225, 225), cv2.FILLED)
+                    (225, 225, 225), cv2.FILLED)
         cv2.rectangle(img, self.pos, (self.pos[0] + self.w, self.pos[1] + self.h),
-                      (50, 50, 50), 3)
+                    (50, 50, 50), 3)
         cv2.putText(img, self.v, (self.pos[0] + 30, self.pos[1] + 70), cv2.FONT_HERSHEY_PLAIN,
                     2, (50, 50, 50), 2)
- 
+
     def checkClick(self, x, y):
         if self.pos[0] < x < self.pos[0] + self.w and \
                 self.pos[1] < y < self.pos[1] + self.h:
@@ -90,13 +90,6 @@ while True:
     
     outPutBox.draw(img)
     
-    # hands = detector.findHands(img, draw=False)  # No Draw
-    # for x in range(4):
-    #     for y in range(4):
-    #         dx = x * 100 + 800
-    #         dy = y * 100 + 150
-    #         cv2.rectangle(img, (x, dx), (y, dy), (0, 255, 255), 4)
-    #         buttonList.append(Button((dx, dy), 100, 100, buttonListValues[y][x]))
     if hands:
         lmList = hands[0]['lmList']
         length,_, img = detector.findDistance(lmList[8], lmList[12], img)
@@ -135,7 +128,7 @@ while True:
         bbox1 = hand1["bbox"]  # Bounding Box info x,y,w,h
         centerPoint1 = hand1["center"]  # center of the hand cx,cy
         handType1 = hand1["type"]  # Hand Type Left or Right
- 
+
 
         # print(len(lmList1),lmList1)
         # print (lmList1)
@@ -144,15 +137,29 @@ while True:
         fingers1 = detector.fingersUp(hand1)
         #length, info, img = detector.findDistance(lmList1[8], lmList1[12], img) # with draw
         #length, info = detector.findDistance(lmList1[8], lmList1[12])  # no draw
- 
- 
+
+        lmList_hand1 = detector.findPosition(img, draw=False)
+        tipIds = [4, 8, 12, 16, 20]
+        x2 = lmList_hand1[tipIds[1]][1]                           
+        y2 = lmList_hand1[tipIds[1]][2] 
+
+        if 10 <= x2 <= 70 and 20 <= y2 <= 80:
+            from HandGesturesDraw import *
+            cv2.waitKey(1)
+            cv2.destroyAllWindows()
+        elif 10 <= x2 <= 70 and 120 <= y2 <= 180:
+            from HandGesturesCameraupdate import *
+            cv2.waitKey(1)
+            cv2.destroyAllWindows()
+
+
         if len(hands) == 2:
             hand2 = hands[1]
             lmList2 = hand2["lmList"]  # List of 21 Landmarks points
             bbox2 = hand2["bbox"]  # Bounding Box info x,y,w,h
             centerPoint2 = hand2["center"]  # center of the hand cx,cy
             handType2 = hand2["type"]  # Hand Type Left or Right
- 
+
             fingers2 = detector.fingersUp(hand2)
             # print(fingers1, fingers2)
             #length, info, img = detector.findDistance(lmList1[8], lmList2[8], img) # with draw
@@ -161,7 +168,13 @@ while True:
     if cv2.waitKey(30) == ord(
                 'q'):  # this never triggers which is why I fear this is an infinite loop. Play around with break conditions.
             break  # maybe if the equals symbol is pressed, this break condition is met?
-
+    
+    #different options
+    cv2.circle(img, (40,50), 30, (0,255,0), cv2.FILLED)
+    cv2.putText(img, "Draw", (20, 50), cv2.FONT_HERSHEY_SIMPLEX, fontScale = 0.30, color=(255,255,255))
+    cv2.circle(img, (40,120), 30, (0,255,0), cv2.FILLED)
+    cv2.putText(img, "Camera", (20, 125), cv2.FONT_HERSHEY_SIMPLEX, fontScale = 0.30, color=(255,255,255))
+    
     cv2.imshow("Image", img)
     cv2.waitKey(1)
     timePassed += timerDelay

@@ -8,7 +8,7 @@ import numpy as np
 # from HandGesturesCameraupdate import*
 
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 detector = HandDetector(detectionCon=0.8, maxHands=2)
 menu = cv2.imread("Images/MenuScreen.png")
 count = 0

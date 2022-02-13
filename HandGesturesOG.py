@@ -1,9 +1,10 @@
 import cv2
 from cvzone.HandTrackingModule import HandDetector
+from HandTrackingModule import *
 # import everything from tkinter module
 from tkinter import *
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 detector = HandDetector(detectionCon=0.8, maxHands=1)
 myEquation = ''
 timePassed = 0

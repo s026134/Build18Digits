@@ -7,7 +7,7 @@ from HandTrackingModule import *
 from calculator import *
 from grid import *
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 detector = HandDetector(detectionCon=0.8, maxHands=4) # maybe change maxHands to 2
 #previousTime
 pTime = 0

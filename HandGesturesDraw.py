@@ -5,7 +5,7 @@ import numpy
 import copy
 
 
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 detector = HandDetector(detectionCon=0.8, maxHands=2)
 cv2.resizeWindow("New Window", 1600, 800)
 count = 0
@@ -80,10 +80,10 @@ while True:
                         blank = cv2.bitwise_not(blank)
                         blank = cv2.resize(blank, dsize =(w, h), interpolation = cv2.INTER_AREA)
                     
-                    if 1800 <= x2 <= 1900 and 35 <= y2 <= 65:
+                    if 1210 <= x2 <= 1300 and 20 <= y2 <= 80:
                         from HandGesturesOG import *
                         cv2.destroyAllWindows()
-                    elif 1800 <= x2 <= 1900 and 130 <= y2 <= 160:
+                    elif 1210 <= x2 <= 1300 and 120 <= y2 <= 180:
                         from HandGesturesCameraupdate import *
                         cv2.destroyAllWindows()
 
@@ -115,7 +115,7 @@ while True:
     cv2.putText(newImage, "Camera", (20, 125), cv2.FONT_HERSHEY_SIMPLEX, fontScale = 0.30, color=(255,255,255))
     
     #Clear button
-    cv2.circle(newImage, (1850,50), 30, (255,0,0), cv2.FILLED)
+    cv2.circle(newImage, (1200,50), 30, (255,0,0), cv2.FILLED)
     cv2.imshow("Image", newImage)
     cv2.waitKey(1)
     

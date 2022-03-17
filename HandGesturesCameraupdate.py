@@ -4,7 +4,7 @@ from HandTrackingModule import *
 # from calculator import *
 # from grid import *
 
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 detector = HandDetector(detectionCon=0.8, maxHands=4) # maybe change maxHands to 2
 
 #previousTime
@@ -79,7 +79,7 @@ while True:
                         y1 = lmList_hand1[tipIds[1]][2]
                         if timePassed >= validTime:
                             timeClicked = timePassed
-                            validTime = timeClicked + 2000
+                            validTime = timeClicked + 1500
     if timePassed == validTime:
         cv2.imwrite("cameraCapture.jpg",img)
         break

@@ -1,5 +1,6 @@
 import cv2
 from cvzone.HandTrackingModule import HandDetector
+from HandTrackingModule import *
 # import everything from tkinter module
 from tkinter import *
 

@@ -79,7 +79,7 @@ while True:
                         y1 = lmList_hand1[tipIds[1]][2]
                         if timePassed >= validTime:
                             timeClicked = timePassed
-                            validTime = timeClicked + 1500
+                            validTime = timeClicked + 2500
     if timePassed == validTime:
         cv2.imwrite("cameraCapture.jpg",img)
         break
